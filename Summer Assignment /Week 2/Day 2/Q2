@@ -1,0 +1,47 @@
+class Solution {
+public:
+    bool checkInclusion(string s1, string s2) {
+        if (s1.length() > s2.length()) return false;
+
+        int need[26] = {};   // positive = need more, negative = have excess
+        int matches = 0;     // how many chars are perfectly balanced
+
+        // build frequency diff from s1
+        for (char c : s1) need[c - 'a']++;
+
+        // count how many chars start at 0 (already balanced)
+        for (int i = 0; i < 26; i++)
+            if (need[i] == 0) matches++;
+
+        int k = s1.length();
+
+        // initialize first window
+        for (int i = 0; i < k; i++) {
+            int c = s2[i] - 'a';
+            need[c]--;
+            if (need[c] == 0)       matches++;
+            else if (need[c] == -1) matches--;
+        }
+
+        if (matches == 26) return true;
+
+        // slide the window
+        for (int i = k; i < s2.length(); i++) {
+            // add right character
+            int add = s2[i] - 'a';
+            need[add]--;
+            if (need[add] == 0)       matches++;
+            else if (need[add] == -1) matches--;
+
+            // remove left character
+            int rem = s2[i - k] - 'a';
+            need[rem]++;
+            if (need[rem] == 0)      matches++;
+            else if (need[rem] == 1) matches--;
+
+            if (matches == 26) return true;
+        }
+
+        return false;
+    }
+};

@@ -1,0 +1,23 @@
+class Solution {
+public:
+    int lengthOfLongestSubstring(string s) {
+        int lastSeen[128] = {};
+        memset(lastSeen, -1, sizeof(lastSeen));
+
+        int best = 0;
+        int left = 0;
+
+        for (int right = 0; right < s.length(); right++) {
+            char c = s[right];
+
+            if (lastSeen[c] >= left) {        // duplicate inside window
+                left = lastSeen[c] + 1;       // jump past it instantly
+            }
+
+            lastSeen[c] = right;
+            best = max(best, right - left + 1);
+        }
+
+        return best;
+    }
+};

@@ -1,0 +1,41 @@
+class Solution {
+public:
+    vector<int> findAnagrams(string s, string p) {
+        vector<int> result;
+        if (p.length() > s.length()) return result;
+
+        int need[26] = {};
+        int matches  = 0;
+        int k        = p.length();
+
+        for (char c : p) need[c - 'a']++;
+        for (int i = 0; i < 26; i++)
+            if (need[i] == 0) matches++;
+
+        // first window
+        for (int i = 0; i < k; i++) {
+            int c = s[i] - 'a';
+            need[c]--;
+            if      (need[c] == 0)  matches++;
+            else if (need[c] == -1) matches--;
+        }
+        if (matches == 26) result.push_back(0);
+
+        // slide
+        for (int i = k; i < s.length(); i++) {
+            int add = s[i] - 'a';
+            need[add]--;
+            if      (need[add] == 0)  matches++;
+            else if (need[add] == -1) matches--;
+
+            int rem = s[i - k] - 'a';
+            need[rem]++;
+            if      (need[rem] == 0) matches++;
+            else if (need[rem] == 1) matches--;
+
+            if (matches == 26) result.push_back(i - k + 1);
+        }
+
+        return result;
+    }
+};

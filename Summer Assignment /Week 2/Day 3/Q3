@@ -1,0 +1,8 @@
+class Solution {
+public:
+    bool repeatedSubstringPattern(string s) {
+        string doubled = s + s;
+        doubled = doubled.substr(1, doubled.length() - 2);  // strip first and last char
+        return doubled.find(s) != string::npos;
+    }
+};

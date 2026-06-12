@@ -1,0 +1,34 @@
+class Solution {
+public:
+    string decodeString(string s) {
+        stack<int>    counts;   // repeat numbers
+        stack<string> strs;     // strings built before each '['
+        string current = "";
+        int k = 0;
+
+        for (char c : s) {
+            if (isdigit(c)) {
+                k = k * 10 + (c - '0');         // handle multi-digit numbers
+
+            } else if (c == '[') {
+                counts.push(k);                  // save repeat count
+                strs.push(current);              // save string so far
+                current = "";                    // start fresh inside bracket
+                k = 0;
+
+            } else if (c == ']') {
+                int repeat = counts.top(); counts.pop();
+                string prev = strs.top();  strs.pop();
+
+                for (int i = 0; i < repeat; i++)
+                    prev += current;             // append current block k times
+                current = prev;                  // restore with expansion
+
+            } else {
+                current += c;                    // regular character
+            }
+        }
+
+        return current;
+    }
+};

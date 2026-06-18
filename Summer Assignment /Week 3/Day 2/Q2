@@ -1,0 +1,23 @@
+class Solution {
+public:
+    ListNode* removeNthFromEnd(ListNode* head, int n) {
+        ListNode dummy(0, head);
+        ListNode* slow = &dummy;
+        ListNode* fast = &dummy;
+
+        // advance fast n+1 steps so gap = n
+        for (int i = 0; i <= n; i++)
+            fast = fast->next;
+
+        // move together until fast hits null
+        while (fast != nullptr) {
+            slow = slow->next;
+            fast = fast->next;
+        }
+
+        // slow is now just before the target node
+        slow->next = slow->next->next;
+
+        return dummy.next;
+    }
+};

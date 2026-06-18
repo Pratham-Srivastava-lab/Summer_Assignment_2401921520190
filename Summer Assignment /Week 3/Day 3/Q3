@@ -1,0 +1,22 @@
+class Solution {
+public:
+    vector<int> nextGreaterElement(vector<int>& nums1, vector<int>& nums2) {
+        unordered_map<int, int> nextGreater;  // value → next greater value
+        stack<int> st;                         // monotonic decreasing stack
+
+        for (int num : nums2) {
+            while (!st.empty() && st.top() < num) {
+                nextGreater[st.top()] = num;   // num is the next greater for top
+                st.pop();
+            }
+            st.push(num);
+        }
+        // anything left in stack has no next greater → defaults to -1
+
+        vector<int> result;
+        for (int num : nums1)
+            result.push_back(nextGreater.count(num) ? nextGreater[num] : -1);
+
+        return result;
+    }
+};

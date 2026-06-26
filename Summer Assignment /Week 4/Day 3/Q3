@@ -1,0 +1,14 @@
+class Solution {
+public:
+    TreeNode* lowestCommonAncestor(TreeNode* root, TreeNode* p, TreeNode* q) {
+        while (root) {
+            if (p->val < root->val && q->val < root->val)
+                root = root->left;   // both smaller → LCA is in left subtree
+            else if (p->val > root->val && q->val > root->val)
+                root = root->right;  // both larger  → LCA is in right subtree
+            else
+                return root;         // split point → this node is the LCA
+        }
+        return nullptr;
+    }
+};
